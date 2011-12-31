@@ -21,12 +21,19 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
- * @copyright  Leo Unglaub 2011
+ * @copyright  Leo Unglaub 2012
  * @author     Leo Unglaub <leo@leo-unglaub.net>
  * @package    activation_mail
  * @license    LGPL
  * @filesource
  */
 
-$GLOBALS['TL_LANG']['tl_member']['am_send_mail'] = array('Benachrichtigungs E-Mail verschicken', 'Wählen Sie diese Option wenn Sie möchten, dass der Account-Besitzer eine Benachrichtigung über die Statusänderung seines Accounts erhalten soll. <br /><strong>Hinweis:</strong> Bei einer Account-Aktivierung können Username und Passwort auf Wunsch automatisch verschickt werden.');
+
+/**
+ * Fields
+ */
+$GLOBALS['TL_LANG']['tl_member']['am_send_mail']				= array('Benachrichtigungs via E-Mail verschicken', 'Aktivieren Sie diese Option um den Benutzer über die Account-Änderung via E-Mail zu informieren.');
+$GLOBALS['TL_LANG']['tl_member']['am_mail_template_enable']		= array('E-Mail Vorlage - Aktivierung', 'Bitte wählen Sie die E-Mail Vorlage welche für Aktivierungs E-Mails verwendet werden soll. Die Daten des Users stehen als "simple tokens" zur Verfügung.');
+$GLOBALS['TL_LANG']['tl_member']['am_mail_template_disable']	= array('E-Mail Vorlage - Deaktivierung', 'Bitte wählen Sie die E-Mail Vorlage welche für die Deaktivierungs E-Mails verwendet werden soll. Die Daten des Users stehen als "simple tokens" zur Verfügung.');
+
 ?>

@@ -21,13 +21,18 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
- * @copyright  Leo Unglaub 2011
+ * @copyright  Leo Unglaub 2012
  * @author     Leo Unglaub <leo@leo-unglaub.net>
  * @package    activation_mail
  * @license    LGPL
  * @filesource
  */
 
-$GLOBALS['TL_LANG']['tl_member']['am_send_mail'] = array('Send notification e-mail', 'Activate this option if you\'d like to inform the account owner about a status modification of his account via e-mail. <br /><strong>Note:</strong> When activating the account, username and password can be sent automatically.');
 
+/**
+ * Fields
+ */
+$GLOBALS['TL_LANG']['tl_member']['am_send_mail']				= array('Send notification mails', 'Select this checkbox to enable the activation notifications.');
+$GLOBALS['TL_LANG']['tl_member']['am_mail_template_enable']		= array('Mail Template - activation', 'Please select the mail template for the activation mail. You have all member options als simple tokens.');
+$GLOBALS['TL_LANG']['tl_member']['am_mail_template_disable']	= array('Mail Template - deactivation', 'Please select the mai template for the deactivation mail. You have all member options as simple tokens.');
 ?>

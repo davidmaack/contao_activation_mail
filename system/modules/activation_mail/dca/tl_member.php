@@ -21,7 +21,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
- * @copyright  Leo Unglaub 2011
+ * @copyright  Leo Unglaub 2012
  * @author     Leo Unglaub <leo@leo-unglaub.net>
  * @package    activation_mail
  * @license    LGPL
@@ -29,50 +29,55 @@
  */
 
 
-$GLOBALS['TL_DCA']['tl_member']['config']['onsubmit_callback'][] = array('activation_mail', 'send_mail');
-$GLOBALS['TL_DCA']['tl_member']['palettes']['default'] = str_replace('{login_legend:hide},login;', '{login_legend:hide},am_send_mail,login;', $GLOBALS['TL_DCA']['tl_member']['palettes']['default']);
+/**
+ * Callbacks
+ */
+$GLOBALS['TL_DCA']['tl_member']['config']['onsubmit_callback'][] = array('ActivationMail', 'sendMail');
 
-$GLOBALS['TL_DCA']['tl_member']['fields']['am_send_mail'] = array(
-			'label'          => &$GLOBALS['TL_LANG']['tl_member']['am_send_mail'],
-			'exclude'        => true,
-            'load_callback'  => array(array('activation_mail', 'reset_am_send_mail')),
-			'inputType'      => 'checkbox'	
+
+/**
+ * Palettes
+ */
+$GLOBALS['TL_DCA']['tl_member']['palettes']['default'] = str_replace('login;', 'am_send_mail,am_mail_template_enable,am_mail_template_disable,login;', $GLOBALS['TL_DCA']['tl_member']['palettes']['default']);
+
+
+/**
+ * Fields
+ */
+$GLOBALS['TL_DCA']['tl_member']['fields']['am_send_mail'] = array
+(
+	'label'			=> &$GLOBALS['TL_LANG']['tl_member']['am_send_mail'],
+	'exclude'		=> true,
+	'inputType'		=> 'checkbox',
+	'load_callback'	=> array
+	(
+		array
+		(
+			'ActivationMail', 'resetAmSendMail'
+		)
+	),
+	'eval'			=> array('tl_class'=>'w50')
 );
 
-class activation_mail extends Backend {
-    
-    // helper function to uncheck the checkbox
-    public function reset_am_send_mail($strValue) {
-        $strValue = 0;
-        return $strValue;
-    }
-    
-    // Send the email
-    public function send_mail() {
-        $this->import('Input');
-               
-        // send mail if login is enabled
-        if ($this->Input->post('login') == 1 and $this->Input->post('am_send_mail') == 1 and $this->Input->post('password') == $this->Input->post('password_confirm')) {
-            $objInfoMail = new Email();
-            $objInfoMail->subject = str_replace('%s',$this->Environment->host,$GLOBALS['TL_LANG']['MSC']['am']['subject_enabled']);
-            $objInfoMail->from = str_replace('%s',$this->Environment->host,$GLOBALS['TL_LANG']['MSC']['am']['sender_mail']);
-            $objInfoMail->fromName = $GLOBALS['TL_LANG']['MSC']['am']['sender_name'];
-            $objInfoMail->text = str_replace(array('%f', '%l', '%g', '%u', '%p'),array($this->Input->post('firstname'), $this->Input->post('lastname'), $this->Environment->host, $this->Input->post('username'),$this->Input->post('password')),$GLOBALS['TL_LANG']['MSC']['am']['content_enabled']);
-            $objInfoMail->sendTo($this->Input->post('email'));
-            unset($objInfoMail);
-        }   
-        
-        // send mail if login is disabled
-        if ($this->Input->post('login') == 0 and $this->Input->post('am_send_mail') == 1) {
-            $objInfoMail = new Email();
-            $objInfoMail->subject = str_replace('%s',$this->Environment->host,$GLOBALS['TL_LANG']['MSC']['am']['subject_disabled']);
-            $objInfoMail->from = str_replace('%s',$this->Environment->host,$GLOBALS['TL_LANG']['MSC']['am']['sender_mail']);
-            $objInfoMail->fromName = $GLOBALS['TL_LANG']['MSC']['am']['sender_name'];
-            $objInfoMail->text = str_replace(array('%f', '%l', '%g', '%u', '%p'),array($this->Input->post('firstname'), $this->Input->post('lastname'), $this->Environment->host, $this->Input->post('username'),$this->Input->post('password')),$GLOBALS['TL_LANG']['MSC']['am']['content_disabled']);
-            $objInfoMail->sendTo($this->Input->post('email'));
-            unset($objInfoMail);
-        }
-    }
-}
+$GLOBALS['TL_DCA']['tl_member']['fields']['am_mail_template_enable'] = array
+(
+	'label'			=> &$GLOBALS['TL_LANG']['tl_member']['am_mail_template_enable'],
+	'exclude'		=> true,
+	'inputType'		=> 'select',
+	'options'		=> MailTemplatesHelper::getSelectValues(),
+	'eval'			=> array('tl_class'=>'w50 clr')
+);
+
+$GLOBALS['TL_DCA']['tl_member']['fields']['am_mail_template_disable'] = array
+(
+	'label'			=> &$GLOBALS['TL_LANG']['tl_member']['am_mail_template_disable'],
+	'exclude'		=> true,
+	'inputType'		=> 'select',
+	'options'		=> MailTemplatesHelper::getSelectValues(),
+	'eval'			=> array('tl_class'=>'w50')
+);
+
+// we need a clr otherwize it looks stupid
+$GLOBALS['TL_DCA']['tl_member']['fields']['login']['eval']['tl_class'] .= ' clr';
 
 ?>

@@ -73,8 +73,16 @@ class ActivationMail extends Backend
 			$arrTokens = $objMember->fetchAssoc();
 			$arrTokens['password'] = $this->Input->post('password');
 
+			// prepare the array with the additional addresses
+			$arrSendTo = array();
+			$arrSendTo['to'] = $objMember->email;
+
+
         	// use the mail_template extension to send the email
-        	MailTemplate::sendMail($this->Input->post('am_mail_template_enable'), false, $arrTokens);
+        	MailTemplate::sendMail($this->Input->post('am_mail_template_enable'), false, $arrTokens, $arrSendTo);
+
+			// log the event
+			$this->log('The member ID '. $objMember->id . ' has been notified.', 'ActivationMail sendMail()', 'ACTIVATION_MAIL');
         }   
 
 
@@ -91,8 +99,16 @@ class ActivationMail extends Backend
 
 			$arrTokens = $objMember->fetchAssoc();
 
+			// prepare the array with the additional addresses
+			$arrSendTo = array();
+			$arrSendTo['to'] = $objMember->email;
+
+
         	// use the mail_template extension to send the email
-        	MailTemplate::sendMail($this->Input->post('am_mail_template_disable'), false, $arrTokens);
+        	MailTemplate::sendMail($this->Input->post('am_mail_template_disable'), false, $arrTokens, $arrSendTo);
+
+			// log the event
+			$this->log('The member ID '. $objMember->id . ' has been notified.', 'ActivationMail sendMail()', 'ACTIVATION_MAIL');
         }
     }
 }
